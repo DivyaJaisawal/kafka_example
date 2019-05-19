@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "com.google.protobuf" version "0.8.8"
 }
 
 group 'com.divya'
@@ -9,8 +10,42 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile "com.google.protobuf:protobuf-java:3.6.1"
+
+    compile group: 'io.grpc', name: 'grpc-protobuf', version: '1.19.0'
+    compile group: 'io.grpc', name: 'grpc-stub', version: '1.19.0'
+    compile group: 'io.grpc', name: 'grpc-netty-shaded', version: '1.19.0'
+    compile group: 'io.grpc', name: 'grpc-netty', version: '1.19.0'
+
+}
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.10.0'
+}
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.7.0"
+    }
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:1.19.0"
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
 }
