@@ -1,5 +1,7 @@
 package com.divya.greetings.service;
 
+import com.divya.greetings.factory.DBIFactory;
+import com.divya.greetings.repository.GreetRepository;
 import com.example.grpc.Greet;
 import com.example.grpc.GreetingServiceGrpc;
 import io.grpc.ManagedChannel;
@@ -9,18 +11,30 @@ import io.grpc.inprocess.InProcessServerBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
+@RunWith(MockitoJUnitRunner.class)
 public class GreetingServiceTest {
+    @Mock
+    private GreetRepository greetRepository;
+    @Mock
+    private DBIFactory dbiFactory;
+
+
     private static Server inProcessServer;
     private static ManagedChannel inProcessChannel;
+
 
     @Before
     public void setUp() throws Exception {
         String serverName = "in-process server for " + GreetingServiceTest.class;
         inProcessServer = InProcessServerBuilder.forName(serverName).
-                addService(new GreetingService().bindService()).build();
+                addService(new GreetingService(greetRepository, dbiFactory).bindService()).build();
         inProcessChannel = InProcessChannelBuilder.forName(serverName).directExecutor().build();
         inProcessServer.start();
 
@@ -28,7 +42,6 @@ public class GreetingServiceTest {
 
     @After
     public void tearDown() {
-
         inProcessServer.shutdownNow();
         inProcessChannel.shutdownNow();
     }
