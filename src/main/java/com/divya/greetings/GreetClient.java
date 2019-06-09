@@ -9,19 +9,19 @@ import io.grpc.StatusRuntimeException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public class Client {
+public class GreetClient {
 
-    private static final Logger logger = Logger.getLogger(Client.class.getName());
+    private static final Logger logger = Logger.getLogger(GreetClient.class.getName());
     private final ManagedChannel channel;
     private final GreetingServiceGrpc.GreetingServiceBlockingStub blockingStub;
 
-    public Client(String host, int port) {
+    public GreetClient(String host, int port) {
         this(ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext()
                 .build());
     }
 
-    Client(ManagedChannel channel) {
+    GreetClient(ManagedChannel channel) {
         this.channel = channel;
         blockingStub = GreetingServiceGrpc.newBlockingStub(channel);
     }
@@ -43,7 +43,7 @@ public class Client {
     }
 
     public static void main(String[] args) throws Exception {
-        Client client = new Client("localhost", 50051);
+        GreetClient client = new GreetClient("localhost", 50051);
         try {
             String user = "hello world";
             if (args.length > 0) {

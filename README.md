@@ -1,4 +1,4 @@
-- Grpc server to greet the world
+- Grpc greetServer to greet the world
 
 - Save the greet in the repository
 

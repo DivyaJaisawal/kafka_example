@@ -9,25 +9,25 @@ import io.grpc.ServerBuilder;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-public class Server {
-    private static final Logger logger = Logger.getLogger(Server.class.getName());
+public class GreetServer {
+    private static final Logger logger = Logger.getLogger(GreetServer.class.getName());
     private io.grpc.Server server;
 
     private void start() throws IOException {
-        int port = 50051;
+            int port = 50051;
         ApplicationConfiguration appConfig = Figaro.configure(RequiredConfigurations.requiredConfigurations());
         server = ServerBuilder.forPort(port)
-                .addService(GreetingServiceFactory.instance(appConfig, true))
+                .addService(GreetingServiceFactory.instance(appConfig))
                 .build()
                 .start();
-        logger.info("Server started, listening on " + port);
+        logger.info("GreetServer started, listening on " + port);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
                 // Use stderr here since the logger may have been reset by its JVM shutdown hook.
                 System.err.println("*** shutting down gRPC server since JVM is shutting down");
-                Server.this.stop();
+                GreetServer.this.stop();
                 System.err.println("*** server shut down");
             }
         });
@@ -47,9 +47,9 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        final Server server = new Server();
-        server.start();
-        server.blockUntilShutdown();
+        final GreetServer greetServer = new GreetServer();
+        greetServer.start();
+        greetServer.blockUntilShutdown();
     }
 }
 

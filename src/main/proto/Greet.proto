@@ -12,4 +12,11 @@ message HelloRequest {
 
 message HelloResponse {
     string greeting = 1;
+    bool success = 2;
+    repeated GreetError errors = 3;
+}
+
+message GreetError {
+    string code = 1;
+    string entity = 2;
 }

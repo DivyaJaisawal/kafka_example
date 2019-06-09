@@ -10,7 +10,10 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
-    mavenCentral()
+    maven {
+        url "http://artifactory-gopay.golabs.io/artifactory/gopay-libs-releases"
+    }
+    mavenLocal()
     jcenter()
 }
 
@@ -21,7 +24,6 @@ dependencies {
     compile group: 'io.grpc', name: 'grpc-stub', version: '1.19.0'
     compile group: 'io.grpc', name: 'grpc-netty-shaded', version: '1.19.0'
     compile group: 'io.grpc', name: 'grpc-netty', version: '1.19.0'
-
 
     compile group: 'com.zaxxer', name: 'HikariCP', version: '2.7.1'
     compile group: 'org.postgresql', name: 'postgresql', version: '9.4.1212'
@@ -34,12 +36,19 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.24'
     compile 'org.slf4j:jul-to-slf4j:1.7.24'
 
+    compile 'org.apache.kafka:kafka-streams:0.11.0.1:test'
+    compile 'org.apache.kafka:kafka-clients:0.11.0.1:test'
+    compile 'org.apache.kafka:kafka_2.11:0.11.0.1:test'
+
+    compile 'com.github.stefanbirkner:system-rules:1.16.1'
+
     compile 'com.gojek:jfigaro:1.2.3'
     testCompile group: 'commons-io', name: 'commons-io', version: '2.5'
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
     testCompile group: 'io.grpc', name: 'grpc-testing', version: '1.20.0'
-
+    testCompile 'com.jayway.awaitility:awaitility:1.7.0'
+    testCompile 'com.gopay:kafka-test-utils:0.0.6'
 }
 
 task wrapper(type: Wrapper) {
@@ -75,4 +84,31 @@ flyway {
     url = 'jdbc:postgresql://localhost:5432/greeting_test'
     user = 'postgres'
     password = 'postgres'
+}
+
+task startServer(type: JavaExec) {
+    main = "com.divya.greetings.GreetServer"
+    description = "Starts server."
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperties = [
+            "user.timezone": "UTC"
+    ]
+}
+
+task startClient(type: JavaExec) {
+    main = "com.divya.greetings.GreetClient"
+    description = "Client listening "
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperties = [
+            "user.timezone": "UTC"
+    ]
+}
+
+task startConsumer(type: JavaExec) {
+    main = "com.divya.greetings.kafka.KafkaConsumer"
+    description = "Starts consumer."
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperties = [
+            "user.timezone": "UTC"
+    ]
 }

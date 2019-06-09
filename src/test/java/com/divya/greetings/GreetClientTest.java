@@ -20,13 +20,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ClientTest {
+public class GreetClientTest {
     @Rule
     public final GrpcCleanupRule grpcCleanup = new GrpcCleanupRule();
 
     private final GreetingServiceGrpc.GreetingServiceImplBase serviceImpl =
             mock(GreetingServiceGrpc.GreetingServiceImplBase.class, delegatesTo(new GreetingServiceGrpc.GreetingServiceImplBase() {}));
-    private Client client;
+    private GreetClient client;
 
     @Before
     public void setUp() throws Exception {
@@ -38,12 +38,12 @@ public class ClientTest {
         ManagedChannel channel = grpcCleanup.register(
                 InProcessChannelBuilder.forName(serverName).directExecutor().build());
 
-        client = new Client(channel);
+        client = new GreetClient(channel);
     }
 
 
     @Test
-    public void greet_messageDeliveredToServer() {
+    public void greetMessageDeliveredToServer() {
         ArgumentCaptor<Greet.HelloRequest> requestCaptor = ArgumentCaptor.forClass(Greet.HelloRequest.class);
 
         client.greet("test name");

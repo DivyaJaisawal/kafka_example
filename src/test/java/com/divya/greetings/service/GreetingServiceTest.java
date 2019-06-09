@@ -1,9 +1,11 @@
 package com.divya.greetings.service;
 
 import com.divya.greetings.factory.DBIFactory;
+import com.divya.greetings.kafka.MessagePublisher;
 import com.divya.greetings.repository.GreetRepository;
 import com.example.grpc.Greet;
 import com.example.grpc.GreetingServiceGrpc;
+import com.gojek.ApplicationConfiguration;
 import io.grpc.ManagedChannel;
 import io.grpc.Server;
 import io.grpc.inprocess.InProcessChannelBuilder;
@@ -24,6 +26,10 @@ public class GreetingServiceTest {
     private GreetRepository greetRepository;
     @Mock
     private DBIFactory dbiFactory;
+    @Mock
+    ApplicationConfiguration appConfig;
+    @Mock
+    MessagePublisher producer;
 
 
     private static Server inProcessServer;
@@ -34,7 +40,7 @@ public class GreetingServiceTest {
     public void setUp() throws Exception {
         String serverName = "in-process server for " + GreetingServiceTest.class;
         inProcessServer = InProcessServerBuilder.forName(serverName).
-                addService(new GreetingService(greetRepository, dbiFactory).bindService()).build();
+                addService(new GreetingService(greetRepository, dbiFactory, appConfig, producer).bindService()).build();
         inProcessChannel = InProcessChannelBuilder.forName(serverName).directExecutor().build();
         inProcessServer.start();
 
