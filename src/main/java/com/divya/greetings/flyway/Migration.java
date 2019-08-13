@@ -6,7 +6,8 @@ public class Migration {
 
     public static void main(String[] args) {
         Flyway flyway = new Flyway();
-        flyway.setDataSource("jdbc:postgresql://localhost:5432/greeting_test", "postgres", "postgres");
+        flyway.setDataSource("jdbc:postgresql://localhost:5432/greeting_test",
+                "postgres", "postgres");
         flyway.setBaselineOnMigrate(true);
         flyway.migrate();
     }

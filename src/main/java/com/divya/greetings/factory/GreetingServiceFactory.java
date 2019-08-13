@@ -18,9 +18,11 @@ public class GreetingServiceFactory {
         final Integer greetTimeoutInSec =
                 appConfig.getValueAsInt("GREET_TIMEOUT_IN_SEC", 1);
         GreetRepository repository = new GreetRepository(dbi, greetTimeoutInSec);
-        MessagePublisher kafkaProducer = new MessagePublisher(appConfig, KafkaCreator.createProducer(appConfig));
-        DBIFactory dbiFactory = new DBIFactory(appConfig);
-        GreetingService greetingService = new GreetingService(repository, dbiFactory, appConfig, kafkaProducer);
+        MessagePublisher kafkaProducer = new MessagePublisher(appConfig,
+                KafkaCreator.createProducer(appConfig));
+        GreetingService greetingService = new GreetingService(
+                repository,
+                kafkaProducer);
         return ServerInterceptors.intercept(greetingService, Collections.emptyList());
     }
 }

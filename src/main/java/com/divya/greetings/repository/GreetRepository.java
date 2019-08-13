@@ -6,7 +6,7 @@ import org.skife.jdbi.v2.DBI;
 import java.util.List;
 
 public class GreetRepository {
-    DBI dbi;
+    private DBI dbi;
     private int queryTimeOutInSeconds;
     private static final String INSERT_INTO_GREET = "INSERT INTO greet (message) VALUES (:message)";
     private static final String SELECT_QUERY = "SELECT * FROM greet";
@@ -24,7 +24,6 @@ public class GreetRepository {
             return null;
         });
     }
-
     public List<Greet> find() {
         return dbi.withHandle(handle -> handle.createQuery(SELECT_QUERY)
                 .map(new GreetResultSetMapper())

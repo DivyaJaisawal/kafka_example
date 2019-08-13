@@ -31,7 +31,6 @@ public class GreetingServiceTest {
     @Mock
     MessagePublisher producer;
 
-
     private static Server inProcessServer;
     private static ManagedChannel inProcessChannel;
 
@@ -40,10 +39,10 @@ public class GreetingServiceTest {
     public void setUp() throws Exception {
         String serverName = "in-process server for " + GreetingServiceTest.class;
         inProcessServer = InProcessServerBuilder.forName(serverName).
-                addService(new GreetingService(greetRepository, dbiFactory, appConfig, producer).bindService()).build();
+                addService(new GreetingService(greetRepository, producer).bindService()).build();
         inProcessChannel = InProcessChannelBuilder.forName(serverName).directExecutor().build();
+        System.out.println("server started");
         inProcessServer.start();
-
     }
 
     @After

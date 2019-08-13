@@ -12,8 +12,8 @@ public class GreetRepositoryTest extends DataStoreRepositoryTest {
     private GreetRepository greetRepository;
 
     @Before
-    public void setUp() throws Exception {
-        greetRepository = new GreetRepository(dbi, 4);
+    public void setUp() {
+        greetRepository = new GreetRepository(dbi, 1000);
     }
 
     @Test

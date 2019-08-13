@@ -10,8 +10,6 @@ import java.sql.SQLException;
 
 public class GreetResultSetMapper implements ResultSetMapper<Greet> {
 
-    private static final String IDR = "IDR";
-
     @Override
     public Greet map(int index, ResultSet r, StatementContext ctx) throws SQLException {
         Greet message = new Greet(r.getString("message"));

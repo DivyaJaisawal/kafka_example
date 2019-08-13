@@ -10,5 +10,4 @@ public class Greet {
     public String getMessage() {
         return message;
     }
-
 }
